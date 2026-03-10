@@ -949,6 +949,26 @@ pub static SUPPORTED_LANGUAGES: LazyLock<Vec<LangProfile>> = LazyLock::new(|| {
             allow_parse_errors: false,
         },
         LangProfile {
+            name: "Svelte",
+            alternate_names: &[],
+            extensions: &["svelte"],
+            file_names: &[],
+            language: tree_sitter_svelte_ng::LANGUAGE.into(),
+            atomic_nodes: &[],
+            commutative_parents: vec![
+                CommutativeParent::new("self_closing_tag", "<", " ", "/>"),
+                CommutativeParent::new("start_tag", "<", " ", ">"),
+            ],
+            signatures: vec![signature(
+                "attribute",
+                vec![vec![ChildKind("attribute_name")]],
+            )],
+            injections: Some(tree_sitter_svelte_ng::INJECTIONS_QUERY),
+            flattened_nodes: &[],
+            extra_comment_nodes: &[],
+            allow_parse_errors: true,
+        },
+        LangProfile {
             name: "Scala",
             alternate_names: &[],
             extensions: &["scala", "sbt"],
