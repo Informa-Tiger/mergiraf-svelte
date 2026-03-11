@@ -61,6 +61,24 @@ pub static SUPPORTED_LANGUAGES: LazyLock<Vec<LangProfile>> = LazyLock::new(|| {
     .concat();
     let tsx_flattened_nodes = typescript_flattened_nodes;
 
+    let svelte_commutative_parents = [
+        typescript_commutative_parents.clone(),
+        vec![
+            CommutativeParent::new("self_closing_tag", "<", " ", "/>"),
+            CommutativeParent::new("start_tag", "<", " ", ">"),
+        ],
+    ]
+    .concat();
+    let svelte_signatures = [
+        typescript_signatures.clone(),
+        vec![signature(
+            "attribute",
+            vec![vec![ChildKind("attribute_name")]],
+        )],
+    ]
+    .concat();
+    let svelte_flattened_nodes = typescript_flattened_nodes;
+
     let ocaml_commutative_parents = vec![
         /* Record fields */
         CommutativeParent::new("record_expression", "{", "; ", "}")
@@ -955,16 +973,10 @@ pub static SUPPORTED_LANGUAGES: LazyLock<Vec<LangProfile>> = LazyLock::new(|| {
             file_names: &[],
             language: tree_sitter_svelte_ng::LANGUAGE.into(),
             atomic_nodes: &[],
-            commutative_parents: vec![
-                CommutativeParent::new("self_closing_tag", "<", " ", "/>"),
-                CommutativeParent::new("start_tag", "<", " ", ">"),
-            ],
-            signatures: vec![signature(
-                "attribute",
-                vec![vec![ChildKind("attribute_name")]],
-            )],
+            commutative_parents: svelte_commutative_parents,
+            signatures: svelte_signatures,
             injections: Some(tree_sitter_svelte_ng::INJECTIONS_QUERY),
-            flattened_nodes: &[],
+            flattened_nodes: svelte_flattened_nodes,
             extra_comment_nodes: &[],
             allow_parse_errors: true,
         },
